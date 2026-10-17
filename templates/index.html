@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rankly | Search Demonstrator</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #182238;
+        }
+
+        header {
+            padding: 22px 8%;
+            background: #111b35;
+            color: white;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        header span { color: #72a7ff; }
+
+        main {
+            max-width: 850px;
+            margin: 75px auto;
+            padding: 0 22px;
+        }
+
+        .eyebrow {
+            color: #466de0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 45px);
+            margin: 12px 0;
+        }
+
+        .subtitle { color: #68738a; line-height: 1.7; }
+
+        form {
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 9px;
+            border: 1px solid #e1e6f0;
+            border-radius: 14px;
+            margin: 28px 0 18px;
+            box-shadow: 0 10px 30px #17284a0d;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            outline: none;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 9px;
+            background: #4268e8;
+            color: white;
+            padding: 0 23px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover { background: #2f50c4; }
+
+        .hint { color: #7b8497; font-size: 13px; }
+
+        .results-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .result {
+            background: white;
+            border: 1px solid #e5e9f2;
+            border-radius: 13px;
+            padding: 22px;
+            margin: 14px 0;
+        }
+
+        .rank { color: #4268e8; font-size: 12px; font-weight: bold; }
+
+        .result h3 { margin: 10px 0; }
+
+        .result p { color: #68738a; line-height: 1.7; }
+
+        .score {
+            display: inline-block;
+            background: #eaf7ef;
+            color: #197447;
+            border-radius: 20px;
+            padding: 7px 11px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            color: #68738a;
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px 15px;
+            color: #7b8497;
+            font-size: 12px;
+        }
+
+        @media (max-width: 500px) {
+            form { flex-direction: column; }
+            button { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header>Rank<span>ly.</span> <small> | IR Lab</small></header>
+
+    <main>
+        <div class="eyebrow">Information Retrieval Project</div>
+        <h1>Find relevant information.</h1>
+        <p class="subtitle">
+            Explore how search queries retrieve and rank documents
+            using TF-IDF and cosine similarity.
+        </p>
+
+        <form method="POST">
+            <input
+                type="text"
+                name="query"
+                placeholder="Try computer network security..."
+                value="{{ query }}"
+                required
+            >
+            <button type="submit">Search →</button>
+        </form>
+
+        <div class="hint">
+            Try: network security · information retrieval · encryption
+        </div>
+
+        {% if query %}
+            
+<div class="results-heading">
+    <h2>Search results</h2>
+    <span>{{ results|length }} found</span>
+</div>
+
+<div style="display:flex; gap:12px; flex-wrap:wrap; margin:16px 0;">
+    <div class="result" style="flex:1; min-width:150px; margin:0;">
+        <div class="rank">DOCUMENT COLLECTION</div>
+        <h2>{{ total_documents }}</h2>
+        <p>Available documents</p>
+    </div>
+
+    <div class="result" style="flex:1; min-width:150px; margin:0;">
+        <div class="rank">RETRIEVED RESULTS</div>
+        <h2>{{ results|length }}</h2>
+        <p>Matching documents</p>
+    </div>
+
+    <div class="result" style="flex:1; min-width:150px; margin:0;">
+        <div class="rank">SEARCH PERFORMANCE</div>
+        <h2>{{ search_time }} ms</h2>
+        <p>Measured search duration</p>
+    </div>
+</div>
+
+
+            {% if results %}
+                {% for result in results %}
+                    <article class="result">
+                        <div class="rank">RANK #{{ loop.index }}</div>
+                        <h3>{{ result.title }}</h3>
+                        <p>{{ result.content }}</p>
+                        <span class="score">
+                            Relevance: {{ result.score }}%
+                        </span>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <div class="empty">
+                    No matching documents found. Try different keywords.
+                </div>
+            {% endif %}
+        {% endif %}
+    </main>
+
+    <footer>
+        Search Result Ranking Demonstrator · TF-IDF + Cosine Similarity
+    </footer>
+</body>
+</html>
