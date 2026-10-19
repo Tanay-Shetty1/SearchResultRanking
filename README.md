@@ -8,3 +8,4 @@ Python Flask application using TF-IDF and cosine similarity.
 - Automated testing with pytest
 - Docker deployment
 - Jenkins CI/CD pipeline
+Automatic Jenkins trigger test - 2
